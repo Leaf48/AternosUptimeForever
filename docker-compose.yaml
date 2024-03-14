@@ -1,0 +1,7 @@
+services:
+  mc:
+    container_name: mc-bot
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
