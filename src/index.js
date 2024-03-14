@@ -35,13 +35,13 @@ const init = () => {
       }, 1000 * 30);
     });
 
-    // bot.on("error", (err) => {
-    //   console.log(err);
-    //   console.log("Reconnecting...");
-    //   setTimeout(() => {
-    //     init();
-    //   }, 1000 * 10);
-    // });
+    bot.on("error", (err) => {
+      console.log(err);
+      console.log("Reconnecting...");
+      setTimeout(() => {
+        init();
+      }, 1000 * 30);
+    });
   } catch (error) {
     init();
   }
