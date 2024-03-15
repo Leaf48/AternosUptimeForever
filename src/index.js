@@ -20,8 +20,12 @@ const init = () => {
       return;
     };
 
-    bot.on("login", () => {
+    bot.once("login", () => {
+      console.log("Logged in successfully");
       // bot.chat("こんにちは");
+    });
+
+    bot.on("spawn", () => {
       setInterval(async () => {
         await changeView();
       }, 1000 * 3);
