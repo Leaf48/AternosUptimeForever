@@ -27,7 +27,7 @@ const init = () => {
       }, 1000 * 3);
     });
 
-    bot.on("end", (reason) => {
+    bot.once("end", (reason) => {
       console.error(reason);
       console.log("Reconnecting...");
       setTimeout(() => {
@@ -35,7 +35,7 @@ const init = () => {
       }, 1000 * 30);
     });
 
-    bot.on("error", (err) => {
+    bot.once("error", (err) => {
       console.log(err);
       console.log("Reconnecting...");
       setTimeout(() => {
