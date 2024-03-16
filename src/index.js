@@ -2,6 +2,21 @@ import dotenv from "dotenv";
 import { createBot } from "mineflayer";
 dotenv.config();
 
+const commands = ["forward", "back", "left", "right", "jump"];
+
+const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+const sleep = (wait) => new Promise((resolve) => setTimeout(resolve, wait));
+
+let loop;
+
+const reconnect = () => {
+  clearInterval(loop);
+  setTimeout(() => {
+    init();
+  }, 1000 * 30);
+};
+
 const init = () => {
   try {
     const bot = createBot({
@@ -20,31 +35,36 @@ const init = () => {
       return;
     };
 
+    const changePos = async () => {
+      const action = getRandom(commands);
+      bot.setControlState("sprint", true);
+      bot.setControlState(action, true);
+      await sleep(5000); // 5秒待機
+      bot.clearControlStates();
+    };
+
     bot.once("login", () => {
       console.log("Logged in successfully");
       // bot.chat("こんにちは");
     });
 
     bot.on("spawn", () => {
-      setInterval(async () => {
-        await changeView();
-      }, 1000 * 3);
+      loop = setInterval(() => {
+        changeView();
+        changePos();
+      }, 1000 * 10);
     });
 
     bot.once("end", (reason) => {
       console.error(reason);
       console.log("Reconnecting...");
-      setTimeout(() => {
-        init();
-      }, 1000 * 30);
+      reconnect();
     });
 
     bot.once("error", (err) => {
       console.log(err);
       console.log("Reconnecting...");
-      setTimeout(() => {
-        init();
-      }, 1000 * 30);
+      reconnect();
     });
   } catch (error) {
     init();
